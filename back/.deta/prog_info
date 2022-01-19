@@ -1,0 +1,1 @@
+{"id":"7d9dc79f-ec2d-4bea-8634-d9ac69459862","space":16350,"runtime":"python3.9","name":"back","path":"d82pcp","project":"a0h7tm9h","account":"144798365827","region":"eu-central-1","deps":["fastapi==0.72.0","python-multipart==0.0.5"],"envs":null,"public":true,"log_level":"debug","cron":""}
