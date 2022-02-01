@@ -1,3 +1,4 @@
+
 import cv2
 import os
 import numpy as np
@@ -8,9 +9,19 @@ from skimage.color import rgb2gray
 from PIL import Image
 from pathlib import Path
 from pdf2image import convert_from_path
-from PIL import Image
+from PIL import Image, ImageOps
 from io import BytesIO
 from docx import Document
+import io
+
+
+def decodeImage(data):
+    # Gives us 1d array
+    decoded = np.fromstring(data, dtype=np.uint8)
+    # We have to convert it into (270, 480,3) in order to see as an image
+    # decoded = decoded.reshape((decoded.shape))
+    decoded = rgb2gray(cv2.cvtColor(decoded, cv2.COLOR_BGR2RGB))
+    return decoded
 
 
 def pdf_to_cells(file):
@@ -25,14 +36,19 @@ def pdf_to_cells(file):
                                 are ignored.
     """
 
-    if Path(file).suffix == '.pdf':
-        images = convert_from_path(file)
-        img = np.array(images[0])
-        img = (rgb2gray(img)*255).astype('uint8')
-    else:
-        img = cv2.imread(file, 0)
+    # img = np.array(Image.open(io.BytesIO(file)))
 
-    h, w = img.shape
+    # if Path(file).suffix == '.pdf':
+    #     images = convert_from_path(file)
+    #     img = np.array(images[0])
+    #     img = (rgb2gray(img)*255).astype('uint8')
+    # else:
+    #     img = cv2.imread(file, 0)
+    file_bytes = np.asarray(bytearray(file), dtype=np.uint8)
+
+    img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
+
+    h, w,  = img.shape
 
     # Remove upper and lower part of image + left and right margin.
     img = img[int(h*0.23):int(h*0.834), int(w*0.03):int(w*0.955)]
@@ -97,7 +113,7 @@ def recognize_cells(cells):
     for row in cells:
         results.append([])
         for pic in row:
-            img = Image.fromarray(np.zeros((10, 20, 3)))
+            img = Image.fromarray(np.uint8(np.zeros((10, 20, 3)))*255)
             results[-1].append((img, "test_text"))
     return results
 
@@ -120,7 +136,7 @@ def recognized_images_to_docx(recognized_images):
 
     table = document.add_table(rows=max_i, cols=max_j)
     table.style = 'Table Grid'
-
+    print("started looping ")
     for i in range(max_i):
         for j in range(max_j):
             _img, text = recognized_images[i][j]
