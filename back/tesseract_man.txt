@@ -1,0 +1,3 @@
+
+for mac: brew install tesseract
+cp 220207_model/* /usr/local/Cellar/tesseract/5.0.1/share/tessdata

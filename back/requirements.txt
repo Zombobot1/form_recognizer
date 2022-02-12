@@ -106,3 +106,4 @@ websockets==10.1
 Werkzeug==2.0.2
 scikit-image==0.19.1
 python-docx==0.8.11
+pytesseract==0.3.8

@@ -7,6 +7,7 @@ from fastapi.responses import StreamingResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+
 from app import pdf_to_cells, recognize_cells, save_to_docx, write_bytesio_to_file
 
 # uvicorn main:app --reload

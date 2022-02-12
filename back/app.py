@@ -12,6 +12,7 @@ from pdf2image import convert_from_path
 from PIL import Image, ImageOps
 from io import BytesIO
 from docx import Document
+import pytesseract
 import io
 # pwd = os.getcwd()+"/back"
 # os.chdir(pwd)
@@ -116,7 +117,9 @@ def recognize_cells(cells):
         results.append([])
         for pic in row:
             img = Image.fromarray(pic)
-            results[-1].append((img, "test_text"))
+            txt = pytesseract.image_to_string(
+                img, lang="Model_3_2209+Model_4_2401+Model_deu2+model3+model4")
+            results[-1].append((img, txt))
     return results
 
 
