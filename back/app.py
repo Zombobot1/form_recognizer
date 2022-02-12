@@ -13,6 +13,8 @@ from PIL import Image, ImageOps
 from io import BytesIO
 from docx import Document
 import io
+# pwd = os.getcwd()+"/back"
+# os.chdir(pwd)
 
 
 def decodeImage(data):
@@ -113,7 +115,7 @@ def recognize_cells(cells):
     for row in cells:
         results.append([])
         for pic in row:
-            img = Image.fromarray(np.uint8(np.zeros((10, 20, 3)))*255)
+            img = Image.fromarray(pic)
             results[-1].append((img, "test_text"))
     return results
 
@@ -150,4 +152,26 @@ def recognized_images_to_docx(recognized_images):
 
     result = BytesIO()
     document.save(result)
+    result.seek(0)
+
+    print("here is the doc ", document)
     return result
+
+
+def write_bytesio_to_file(filename, bytesio):
+    """
+    Write the contents of the given BytesIO to a file.
+    Creates the file or overwrites the file if it does
+    not exist yet.
+    """
+    with open(filename, "wb") as outfile:
+        # Copy the BytesIO stream to the output file
+        outfile.write(bytesio.getbuffer())
+
+
+# cells = pdf_to_cells('Bsp 1-5_geschwärzt-2-1.png')
+# recognized_cells = recognize_cells(cells)
+# print("starting saving ")
+
+# file = save_to_docx(recognized_cells)
+# write_bytesio_to_file('test.docx', file)

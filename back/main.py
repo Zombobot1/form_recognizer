@@ -7,13 +7,13 @@ from fastapi.responses import StreamingResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app import pdf_to_cells, recognize_cells, save_to_docx
+from app import pdf_to_cells, recognize_cells, save_to_docx, write_bytesio_to_file
 
 # uvicorn main:app --reload
 
 app = FastAPI()
 pwd = os.getcwd()+"/back"
-os.chdir(pwd)
+# os.chdir(pwd)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
@@ -49,8 +49,9 @@ async def parse_form(file: UploadFile = File(...)):
     file = save_to_docx(recognized_cells)
 
     print("got processed the entire file ")
-    with open('demo.docx', 'rb') as f:
-        file = BytesIO(f.read())
+    # write_bytesio_to_file('copy.docx', file)
+    # with open('copy.docx', 'rb') as f:
+    #     ali = BytesIO(f.read())
 
     return StreamingResponse(file)
 if __name__ == "__main__":
