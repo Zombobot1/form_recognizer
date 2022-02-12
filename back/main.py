@@ -6,11 +6,12 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import StreamingResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+import os
 
 
 from app import pdf_to_cells, recognize_cells, save_to_docx, write_bytesio_to_file
 
-
+os.environ['MODEL'] = 'Model_3_2209'
 # uvicorn main:app --reload
 
 app = FastAPI()

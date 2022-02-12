@@ -121,7 +121,7 @@ def recognize_cells(cells):
             copy = cpy.deepcopy(pic)
             img = Image.fromarray(pic)
             txt = pytesseract.image_to_string(
-                preprocess(copy), lang="Model_3_2209+Model_4_2401+Model_deu2+model3+model4")
+                preprocess(copy), lang=os.getenv('MODEL'))
             txt = txt.replace('\n', ' ')
             results[-1].append((img, txt))
     return results
