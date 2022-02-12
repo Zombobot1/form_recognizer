@@ -148,6 +148,14 @@ def recognized_images_to_docx(recognized_images):
     print("started looping ")
     for i in range(max_i):
         for j in range(max_j):
+            size = (300, 50)
+            if j == 1 or j == 2:
+                size = (1, 1)
+            if j == 3:
+                size = (100, 20)
+            _img, text = recognized_images[i][j]
+            _img.thumbnail(size, Image.LANCZOS)
+
             _img, text = recognized_images[i][j]
             img = img_to_io(_img)
 
