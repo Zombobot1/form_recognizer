@@ -14,6 +14,8 @@ from io import BytesIO
 from docx import Document
 import pytesseract
 import io
+import copy as cpy
+from preproc import preprocess
 # pwd = os.getcwd()+"/back"
 # os.chdir(pwd)
 
@@ -116,9 +118,10 @@ def recognize_cells(cells):
     for row in cells:
         results.append([])
         for pic in row:
+            copy = cpy.deepcopy(pic)
             img = Image.fromarray(pic)
             txt = pytesseract.image_to_string(
-                img, lang="Model_3_2209+Model_4_2401+Model_deu2+model3+model4")
+                preprocess(copy), lang="Model_3_2209+Model_4_2401+Model_deu2+model3+model4")
             txt = txt.replace('\n', ' ')
             results[-1].append((img, txt))
     return results
