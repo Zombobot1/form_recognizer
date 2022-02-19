@@ -52,6 +52,30 @@ def recognize_cells(cells):
     return results
 
 
+def recognize_cells_default(cells):
+    results = []
+    for row in cells:
+        results.append([])
+        column = 0
+        for pic in row:
+            column += 1
+
+            copy = cpy.deepcopy(pic)
+            img = Image.fromarray(pic)
+            txt = None
+            if column < 3:
+                txt = pytesseract.image_to_string(
+                    copy, lang='deu',
+                    config='-c --psm 7')
+            else:
+                txt = pytesseract.image_to_string(
+                    copy, lang='deu', config='-c --psm 8')
+
+            txt = txt.replace('\n', ' ')
+            results[-1].append((img, txt))
+    return results
+
+
 def save_to_docx(recognized_cells):
     return recognized_images_to_docx(recognized_cells)
 
