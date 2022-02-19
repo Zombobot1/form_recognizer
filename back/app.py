@@ -45,7 +45,7 @@ def recognize_cells(cells):
                     preprocess(copy), lang=os.getenv('MODEL'), config='-c tessedit_char_whitelist=" ,.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÄÖÜßäöü" --psm 7')
             else:
                 txt = pytesseract.image_to_string(
-                    preprocess(copy), lang=os.getenv('MODEL'), config='-c tessedit_char_whitelist=0123456789,. --psm 8')
+                    preprocess(copy), lang=os.getenv('MODEL'), config='-c tessedit_char_whitelist="0123456789$€,." --psm 8')
 
             txt = txt.replace('\n', ' ')
             results[-1].append((img, txt))
