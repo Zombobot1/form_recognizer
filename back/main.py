@@ -9,9 +9,9 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 
-from app import pdf_to_cells, recognize_cells, save_to_docx, write_bytesio_to_file
+from app import extract_boxes, recognize_cells, save_to_docx, write_bytesio_to_file
 
-os.environ['MODEL'] = 'Model_3_2209'
+os.environ['MODEL'] = 'Model_4_2401+Model_3_2209+Model_deu2+model3+model4'
 # uvicorn main:app --reload
 
 app = FastAPI()
@@ -45,7 +45,7 @@ def read_root():
 @app.post("/parseForm")
 async def parse_form(file: UploadFile = File(...)):
 
-    cells = pdf_to_cells(await file.read())
+    cells = extract_boxes(await file.read())
     recognized_cells = recognize_cells(cells)
     print("starting saving ")
 
