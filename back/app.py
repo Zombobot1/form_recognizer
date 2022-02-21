@@ -16,6 +16,7 @@ import pytesseract
 import io
 import copy as cpy
 from preproc import preprocess
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 # pwd = os.getcwd()+"/back"
 # os.chdir(pwd)
 
@@ -91,10 +92,17 @@ def recognized_images_to_docx(recognized_images):
 
     max_i = len(recognized_images)
     max_j = len(recognized_images[0])
-
-    table = document.add_table(rows=max_i, cols=max_j)
+    table = document.add_table(rows=max_i + 1 + 1, cols=max_j)
     table.style = 'Table Grid'
-    print("started looping ")
+    table.rows[0].cells[0].add_paragraph(
+        'Gegenstand \n(ggf. Hersteller, Marke, Typ) \n(Bitte Ausfüllanleitung beachten)').alignment = WD_ALIGN_PARAGRAPH.CENTER
+    table.rows[0].cells[1].add_paragraph(
+        'Fabrikations-/\nIndividual-Nr.').alignment = WD_ALIGN_PARAGRAPH.CENTER
+    table.rows[0].cells[2].add_paragraph(
+        'Kauf-\ndatum').alignment = WD_ALIGN_PARAGRAPH.CENTER
+    table.rows[0].cells[3].add_paragraph(
+        'Kaufpreis\nin EUR').alignment = WD_ALIGN_PARAGRAPH.CENTER
+
     for i in range(max_i):
         for j in range(max_j):
             size = (300, 50)
@@ -108,12 +116,18 @@ def recognized_images_to_docx(recognized_images):
             _img, text = recognized_images[i][j]
             img = img_to_io(_img)
 
-            cell = table.rows[i].cells[j]
+            cell = table.rows[i + 1].cells[j]
             paragraph = cell.paragraphs[0]
             run = paragraph.add_run()
             run.add_picture(img)
             cell.add_paragraph(text)
 
+    table.rows[-1].cells[0].merge(table.rows[-1].cells[1])
+    table.rows[-1].cells[0].merge(table.rows[-1].cells[2])
+    table.rows[-1].cells[0].add_paragraph(
+        'Gesamtwert des entwendeten Gutes:').alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    table.rows[-1].cells[3].add_paragraph(
+        '0.0').alignment = WD_ALIGN_PARAGRAPH.RIGHT
     result = BytesIO()
     document.save(result)
     result.seek(0)
@@ -189,7 +203,7 @@ def extract_boxes(file):
 
     # Binarize and invert.
     thresh, img_bin = cv2.threshold(img, 230, 255, cv2.THRESH_BINARY)
-    #img = img_bin
+    # img = img_bin
     img_bin = 255-img_bin
     x0, x1, y0 = find_table_head(img_bin)
 
