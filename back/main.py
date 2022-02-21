@@ -49,8 +49,10 @@ async def parse_form(file: UploadFile = File(...)):
     cells = extract_boxes(await file.read())
     recognized_cells = None
     if backend != "simple":
+
         recognized_cells = recognize_cells(cells)
     else:
+        print("using simple back end ")
         recognized_cells = recognize_cells_default(cells)
 
     file = save_to_docx(recognized_cells)
