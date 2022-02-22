@@ -111,8 +111,8 @@ def scale_and_remove_noise(img, opt_height=100):
     h, w = img.shape
     if h < opt_height:
         scaling = opt_height/h
-    img = cv2.resize(img, None, fx=scaling, fy=scaling,
-                     interpolation=cv2.INTER_CUBIC)
+        img = cv2.resize(img, None, fx=scaling, fy=scaling,
+                         interpolation=cv2.INTER_CUBIC)
 
     kernel = np.ones((2, 2), np.uint8)
     inv = cv2.bitwise_not(img)
