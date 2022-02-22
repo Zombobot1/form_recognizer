@@ -66,11 +66,10 @@ def recognize_cells_default(cells):
             txt = None
             if column < 3:
                 txt = pytesseract.image_to_string(
-                    copy, lang='deu',
-                    config='-c --psm 7')
+                    copy, lang='deu')
             else:
                 txt = pytesseract.image_to_string(
-                    copy, lang='deu', config='-c --psm 8')
+                    copy, lang='deu')
 
             txt = txt.replace('\n', ' ')
             results[-1].append((img, txt))
