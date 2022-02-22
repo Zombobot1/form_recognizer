@@ -208,8 +208,8 @@ def extract_boxes(file):
 
     # Remove upper and lower part of image + left and right margin.
     y0 += 3  # Make sure lower edge of table head is not included.
-    img = img[y0:int(h*0.85), x0:x1]
-    img_bin = img_bin[y0:int(h*0.85), x0:x1]
+    img = img[y0:int(h*0.9), x0:x1]
+    img_bin = img_bin[y0:int(h*0.9), x0:x1]
 
     # Detect vertical lines of at least 1/60 of total height.
     v_kernel_len = np.array(img).shape[1]//60
